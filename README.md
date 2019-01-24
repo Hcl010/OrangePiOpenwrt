@@ -24,7 +24,7 @@
  
  3.开启 Win32DiskImager ,选择openwrt_for_orange-pi-zero-plus.img，点击写入，即完成固件烧录步骤；
  
- 4.将TF卡插入 Pi 的卡槽中，并使用网线连接至PC，microusb为供电口可用电脑的usb供电或者用手机5v充电头供电；
+ 4.将TF卡插入 Pi 的卡槽中，并接入到当前的局域网，microusb为供电口可用电脑的usb供电或者用手机5v充电头供电；
  
  5.打开浏览器，进入默认网关地址 http://openwrt/  密码：password 进行各项设置；
  
