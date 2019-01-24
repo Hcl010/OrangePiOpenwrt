@@ -12,11 +12,9 @@
  
 所需软件：
  
- ·Win32DiskImager
+ ·Win32DiskImager【windows】 或 etcher【全平台】
  
  ·浏览器
- 
- ·SSH客户端
  
  具体步骤：
  
