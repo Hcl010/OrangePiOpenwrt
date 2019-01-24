@@ -20,18 +20,18 @@
  
  具体步骤：
  
- 1.下载固件并解压。
+ 1.下载固件(openwrt_for_orange-pi-zero-plus.zip)并解压得到(openwrt_for_orange-pi-zero-plus.img) 。
  
  2.将TF卡插入读卡器并连接至PC端；
  
- 3.开启 Win32DiskImager ,选择解压出来的文件，点击写入，即完成固件烧录步骤；
+ 3.开启 Win32DiskImager ,选择openwrt_for_orange-pi-zero-plus.img，点击写入，即完成固件烧录步骤；
  
- 4.将TF卡插入 Pi 的卡槽中，并使用网线连接至PC；
+ 4.将TF卡插入 Pi 的卡槽中，并使用网线连接至PC，microusb为供电口可用电脑的usb供电或者用手机5v充电头供电；
  
- 5.打开SSH客户端，默认连接IP `root@192.168.1.1 -p 22 ` ，初始密码默认为 `password` ；
+ 5.打开浏览器，进入默认网关地址 http://openwrt/  密码：password 进行各项设置；
  
- 6.进入SSH后，粘贴命令行 `echo 0xDEADBEEF > /etc/config/google_fu_mode ` （ 此步骤为开启 shadowsocks 插件 ）；
+ 6.Pi 默认的网络模式为DHCP客户端模式，你需要切换为：静态地址，ipv4地址请手动指定,ipv4网关设置为你主路由的IP地址，dns建议设置为223.5.5.5，其他默认
  
- 7.打开浏览器，进入默认网关地址 http://192.168.1.1 进行各项设置；
+ 7.如果你需要使用PI作为DHCP服务器的话，下方DHCP服务要开启，不要勾选忽略此接口，高级设置中勾选动态DHCP ipv4子网掩码 255.255.255.0 DHCP选项 设置为3,你的PI地址  和 6,你的PI地址。
  
- 8.太监了。
+ 8.保存并应用。
