@@ -43,8 +43,8 @@ echo
 ip link set eth0 promisc on
 modprobe pppoe
 
-read -p "请输入子网信息 例如:192.168.0.0  默认：192.168.0.0" subnet
-read -p "请输入网关信息 例如:92.168.0.1 默认 192.168.0.1" gateway
+read -p "请输入子网信息 例如:192.168.0.0  默认：192.168.0.0 " subnet
+read -p "请输入网关信息 例如:92.168.0.1 默认 192.168.0.1  " gateway
 
 
 if [[ $subnet == "" ]]; then
@@ -89,7 +89,11 @@ echo -e "
 	${yellow}请在下面docker的ssh窗口中设置openwrt的ip地址${none}
 	${yellow}例如：${none}
 	${yellow}uci set network.lan.ipaddr=192.168.1.9${none}
+	${yellow}uci set network.lan.gateway=192.168.1.1${none}
+	${yellow}uci set network.lan.dns=223.5.5.5${none}
 	${yellow}uci commit network${none}
-	${yellow}/etc/init.d/network restart${none}"
+	${yellow}/etc/init.d/network restart${none}
+	${yellow}之后就可以在浏览器访问了${none}
+	"
 
 docker exec -it $ncid sh
