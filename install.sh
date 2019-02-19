@@ -6,7 +6,7 @@ yellow='\e[93m'
 magenta='\e[95m'
 cyan='\e[96m'
 none='\e[0m'
-
+op='Openwrt'
 
 # Root
 [[ $(id -u) != 0 ]] && echo -e "\n 哎呀……请使用 ${red}root ${none}用户运行 ${yellow}~(^_^) ${none}\n" && exit 1
@@ -18,7 +18,7 @@ sys_bit=$(uname -n)
 if [[ $sys_bit != "amlogic" ]]; then
 	echo -e " 
 	哈哈……这个 ${red}辣鸡脚本${none} 不支持你的系统。 ${yellow}(-_-) ${none}
-	备注: 仅支持 N1的Armbian 系统
+	备注: 仅支持 N1 的Armbian 系统
 	" && exit 1
 fi
 
@@ -43,19 +43,16 @@ echo
 ip link set eth0 promisc on
 modprobe pppoe
 
-read -p "请输入子网信息 例如:192.168.0.0  默认：192.168.0.0 " subnet
-read -p "请输入网关信息 例如:92.168.0.1 默认 192.168.0.1  " gateway
+subnet=$(route | grep '255.255.255.0' | awk 'NR==1 {print $1}')
 
-
-if [[ $subnet == "" ]]; then
-	subnet="192.168.0.0"
+if [[ $subnet != "" ]]; then
+	echo -e "${green}已经检测到您的子网为：${subnet}${none}"
 fi
 
-if [[ $gateway == "" ]]; then
-	gateway="192.168.0.1"
-fi
+gateway_prefix=${subnet%.*}"."
 
-
+read -p "请输入你的网关的最后一位 ${gateway_prefix}" gateway_afterfix
+gateway=$gateway_prefix$gateway_afterfix
 
 cid=$(docker ps --filter ancestor=kanshudj/n1-openwrtgateway | awk 'NR > 1 {print $1}')
 
@@ -85,15 +82,21 @@ echo -e "${green}安装成功${none}"
 
 ncid=$(docker ps --filter ancestor=kanshudj/n1-openwrtgateway | awk 'NR > 1 {print $1}')
 
-echo -e " 
-	${yellow}请在下面docker的ssh窗口中设置openwrt的ip地址${none}
-	${yellow}例如：${none}
-	${yellow}uci set network.lan.ipaddr=192.168.1.9${none}
-	${yellow}uci set network.lan.gateway=192.168.1.1${none}
-	${yellow}uci set network.lan.dns=223.5.5.5${none}
-	${yellow}uci commit network${none}
-	${yellow}/etc/init.d/network restart${none}
-	${yellow}之后就可以在浏览器访问了${none}
-	"
 
-docker exec -it $ncid sh
+read -p "请设定openwrt的IP的最后一位 不要和网关相同 ${gateway_prefix}" op_afterfix
+opip=$gateway_prefix$op_afterfix
+echo -e "${green}开始设定${op}的IP地址${none}"
+docker exec -it $ncid uci set network.lan.ipaddr=$opip
+echo -e "${green}${op}的IP地址设定成功！${none}"
+echo -e "${green}开始设定${op}的网关${none}"
+docker exec -it $ncid uci set network.lan.gateway=$gateway
+echo -e "${green}${op}的网关设定成功！${none}"
+echo -e "${green}开始设定${op}的DNS为：223.5.5.5${none}"
+docker exec -it $ncid uci set network.lan.dns=223.5.5.5
+docker exec -it $ncid uci commit network
+docker exec -it $ncid /etc/init.d/network restart
+echo -e "${green}${op}的DNS设定成功！${none}"
+echo -e "${green}提交保存并重启${none}"
+
+echo -e "${green}现在您可以通过${opip}来访问openwrt了${none}"
+
