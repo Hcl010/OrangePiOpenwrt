@@ -15,17 +15,17 @@ cmd="wget"
 #判断平台是否正确
 sys_bit=$(uname -n)
 
-if [[ $sys_bit != "amlogic" ]]; then
-	echo -e " 
-	哈哈……这个 ${red}辣鸡脚本${none} 不支持你的系统。 ${yellow}(-_-) ${none}
-	备注: 仅支持 N1 的Armbian 系统
-	" && exit 1
-fi
+#if [[ $sys_bit != "amlogic" ]]; then
+#	echo -e " 
+#	哈哈……这个 ${red}辣鸡脚本${none} 不支持你的系统。 ${yellow}(-_-) ${none}
+#	备注: 仅支持 N1 的Armbian 系统
+#	" && exit 1
+#fi
 
 #检测内核
 sys_kernel=$(uname -r)
 
-if [[ $sys_kernel != "3.14.29" ]]; then
+if [[ $sys_kernel == "3.14.29" ]]; then
 	echo -e "${red}即将更新内核 请稍后...${none}"
 	echo 
 	wget https://github.com/bettermanbao/docker-gateway/raw/master/ipset.tar.gz
@@ -95,8 +95,9 @@ echo -e "${green}开始设定${op}的DNS为：223.5.5.5${none}"
 docker exec -it $ncid uci set network.lan.dns=223.5.5.5
 docker exec -it $ncid uci commit network
 docker exec -it $ncid /etc/init.d/network restart
+docker exec -it $ncid reboot
 echo -e "${green}${op}的DNS设定成功！${none}"
-echo -e "${green}提交保存并重启${none}"
+echo -e "${green}提交保存并重启${op}${none}"
 
 echo -e "${green}现在您可以通过${opip}来访问openwrt了${none}"
 
