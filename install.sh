@@ -40,7 +40,7 @@ fi
 echo -e "${yellow}设置docker的网络环境${none}"
 echo
 
-ip link set eth0 promisc on
+ip link set wlan0 promisc on
 modprobe pppoe
 
 subnet=$(route | grep '255.255.255.0' | awk 'NR==1 {print $1}')
@@ -72,7 +72,7 @@ fi
 
 echo -e "${green}开始安装新的镜像${none}"
 
-docker network create -d macvlan --subnet=$subnet/24 --gateway=$gateway -o parent=eth0 macnet
+docker network create -d macvlan --subnet=$subnet/24 --gateway=$gateway -o parent=wlan0 macnet
 
 docker pull kanshudj/n1-openwrtgateway
 
